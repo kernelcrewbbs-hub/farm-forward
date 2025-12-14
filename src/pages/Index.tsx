@@ -1,12 +1,47 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import WeatherSection from "@/components/WeatherSection";
+import SoilCropManagement from "@/components/SoilCropManagement";
+import SeasonalCarousel from "@/components/SeasonalCarousel";
+import ClimateCharts from "@/components/ClimateCharts";
+import FarmingTips from "@/components/FarmingTips";
+import MarketPrices from "@/components/MarketPrices";
+import ColdStorageMap from "@/components/ColdStorageMap";
+import ProfitCalculator from "@/components/ProfitCalculator";
+import SustainabilityTracker from "@/components/SustainabilityTracker";
+import CommunityForum from "@/components/CommunityForum";
+import SummarySection from "@/components/SummarySection";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen">
+      <Navbar />
+      <main>
+        <section id="home">
+          <Hero />
+        </section>
+        <section id="weather">
+          <WeatherSection />
+        </section>
+        <ClimateCharts />
+        <section id="crops">
+          <SoilCropManagement />
+        </section>
+        <SeasonalCarousel />
+        <FarmingTips />
+        <section id="market">
+          <MarketPrices />
+        </section>
+        <ProfitCalculator />
+        <section id="storage">
+          <ColdStorageMap />
+        </section>
+        <SustainabilityTracker />
+        <CommunityForum />
+        <SummarySection />
+      </main>
+      <Footer />
     </div>
   );
 };
