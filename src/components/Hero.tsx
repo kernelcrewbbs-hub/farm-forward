@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Leaf, Sprout } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroFarm from "@/assets/hero-farm.jpg";
 
 const Hero = () => {
@@ -94,14 +95,16 @@ const Hero = () => {
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </motion.button>
           
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            className="btn-hero-secondary flex items-center gap-2"
-          >
-            <Leaf className="w-5 h-5" />
-            Explore Home Gardening
-          </motion.button>
+          <Link to="/home-gardening">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              className="btn-hero-secondary flex items-center gap-2"
+            >
+              <Leaf className="w-5 h-5" />
+              Explore Home Gardening
+            </motion.button>
+          </Link>
         </motion.div>
 
         {/* Stats */}
