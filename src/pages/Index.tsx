@@ -11,6 +11,7 @@ import ProfitCalculator from "@/components/ProfitCalculator";
 import SustainabilityTracker from "@/components/SustainabilityTracker";
 import CommunityForum from "@/components/CommunityForum";
 import SummarySection from "@/components/SummarySection";
+import PestForecast from "@/components/PestForecast";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -25,6 +26,7 @@ const Index = () => {
           <WeatherSection />
         </section>
         <ClimateCharts />
+        <PestForecast />
         <section id="crops">
           <SoilCropManagement />
         </section>
