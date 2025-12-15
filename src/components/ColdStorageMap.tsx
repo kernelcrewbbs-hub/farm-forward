@@ -56,7 +56,15 @@ const ColdStorageMap = () => {
                 <div className="flex items-center gap-3"><div className="w-10 h-10 rounded-lg bg-leaf/20 flex items-center justify-center"><Phone className="w-5 h-5 text-leaf" /></div><div><div className="text-xs text-muted-foreground">Contact</div><div className="text-sm font-medium text-foreground">{loc.contact}</div></div></div>
                 <div className="flex items-center gap-3"><div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center"><Clock className="w-5 h-5 text-accent" /></div><div><div className="text-xs text-muted-foreground">Hours</div><div className="text-sm font-medium text-foreground">{loc.hours}</div></div></div>
               </div>
-              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full py-3 rounded-xl bg-primary/10 text-primary font-medium hover:bg-primary hover:text-primary-foreground transition-all flex items-center justify-center gap-2">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98}}
+                onClick={() => {
+                  const mapsUrl = `https://www.google.com/maps/search/${loc.name}+${loc.city}`;
+                  window.open(mapsUrl, '_blank');
+                }}
+                className="w-full py-3 rounded-xl bg-primary/10 text-primary font-medium hover:bg-primary hover:text-primary-foreground transition-all flex items-center justify-center gap-2"
+              >
                 <Navigation className="w-4 h-4" />Get Directions
               </motion.button>
             </motion.div>

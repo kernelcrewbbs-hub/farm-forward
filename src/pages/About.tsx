@@ -1,27 +1,25 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Code, Presentation, Star, Heart, Leaf, Globe, Users } from "lucide-react";
+import { ArrowLeft, Code, Presentation, Star, Heart, Leaf, Globe, Users, Monitor, BarChart3 } from "lucide-react";
 import { Link } from "react-router-dom";
-import lavanyaProfile from "@/assets/lavanya-profile.jpg";
-import hasanProfile from "@/assets/hasan-profile.jpg";
 
 const teamMembers = [
   {
     name: "Lavanya N Gajbhiye",
     role: "Website Designer & Full Stack Developer",
     class: "Class 8K",
-    image: lavanyaProfile,
     icon: Code,
+    displayIcon: Monitor,
     description: "Passionate about creating beautiful, functional websites that make a difference. Skilled in React, TypeScript, and modern web technologies.",
-    color: "from-violet-500 to-purple-600",
+    color: "from-blue-500 to-cyan-600",
   },
   {
     name: "Hasan Rouf",
     role: "Main Presenter",
     class: "Class 8L",
-    image: hasanProfile,
     icon: Presentation,
+    displayIcon: BarChart3,
     description: "Expert communicator and presenter, bringing AgriSmart's vision to life through engaging presentations and demonstrations.",
-    color: "from-cyan-500 to-blue-600",
+    color: "from-green-500 to-emerald-600",
   },
 ];
 
@@ -135,14 +133,12 @@ const About = () => {
                   <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-primary/5 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
                   
                   <div className="relative z-10">
-                    {/* Profile Image */}
-                    <div className="relative w-32 h-32 mx-auto mb-6">
-                      <div className={`absolute inset-0 bg-gradient-to-r ${member.color} rounded-2xl rotate-6 opacity-50`} />
-                      <img
-                        src={member.image}
-                        alt={member.name}
-                        className="relative w-full h-full object-cover rounded-2xl shadow-lg"
-                      />
+                    {/* Profile Icon */}
+                    <div className="relative w-32 h-32 mx-auto mb-6 flex items-center justify-center">
+                      <div className={`absolute inset-0 bg-gradient-to-r ${member.color} rounded-2xl rotate-6 opacity-20`} />
+                      <div className="relative w-full h-full rounded-2xl shadow-lg flex items-center justify-center bg-gradient-to-r from-muted to-muted/50">
+                        <member.displayIcon className="w-16 h-16 text-primary" />
+                      </div>
                       <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-card rounded-xl shadow-lg flex items-center justify-center border border-border">
                         <member.icon className="w-5 h-5 text-primary" />
                       </div>

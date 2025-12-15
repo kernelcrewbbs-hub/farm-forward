@@ -1,9 +1,18 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Leaf, Sprout } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import heroFarm from "@/assets/hero-farm.jpg";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const handleStartFarmingSmart = () => {
+    const weatherSection = document.getElementById('weather');
+    if (weatherSection) {
+      weatherSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -88,6 +97,7 @@ const Hero = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
+            onClick={handleStartFarmingSmart}
             className="btn-hero-primary flex items-center gap-2 group"
           >
             <Sprout className="w-5 h-5" />

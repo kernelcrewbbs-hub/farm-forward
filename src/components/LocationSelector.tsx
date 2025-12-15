@@ -174,7 +174,7 @@ const LocationSelector = ({ isOpen, onClose }: LocationSelectorProps) => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-lg md:w-full bg-card rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[90vh]"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg mx-4 bg-card rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[90vh]"
           >
             {/* Header */}
             <div className="p-6 border-b border-border">
