@@ -174,8 +174,9 @@ const LocationSelector = ({ isOpen, onClose }: LocationSelectorProps) => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg mx-4 bg-card rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[90vh]"
+            className="fixed inset-0 z-50 flex items-center justify-center px-4"
           >
+            <div className="w-full max-w-lg bg-card rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             {/* Header */}
             <div className="p-6 border-b border-border">
               <div className="flex items-center justify-between mb-4">
@@ -266,6 +267,7 @@ const LocationSelector = ({ isOpen, onClose }: LocationSelectorProps) => {
                   </div>
                 </div>
               )}
+            </div>
             </div>
           </motion.div>
         </>

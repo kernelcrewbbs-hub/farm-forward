@@ -1,13 +1,38 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, Target, Wheat, Droplets, Sprout, TrendingUp, Award } from "lucide-react";
+import { useLocation } from "@/contexts/LocationContext";
 
-const recommendedCrops = [
-  { name: "Chickpea", icon: "🌱" },
-  { name: "Lentil", icon: "🫘" },
-  { name: "Short-duration Wheat", icon: "🌾" },
-  { name: "Mustard", icon: "🌻" },
-  { name: "Fenugreek", icon: "🌿" },
-];
+const countryCropMap: Record<string, { name: string; icon: string; varieties?: string[] }[]> = {
+  IN: [
+    { name: "Chickpea", icon: "🌱", varieties: ["JG 11", "Pusa 256"] },
+    { name: "Lentil", icon: "🫘", varieties: ["Lira", "Eston"] },
+    { name: "Short-duration Wheat", icon: "🌾", varieties: ["HD 2967", "PBW 343"] },
+    { name: "Mustard", icon: "🌻", varieties: ["Pusa Bold", "Varuna"] },
+  ],
+  AR: [
+    { name: "Soybean", icon: "🌱", varieties: ["RA 847", "PB 282"] },
+    { name: "Corn", icon: "🌽", varieties: ["DK 691", "Pioneer P30"] },
+    { name: "Sunflower", icon: "🌻", varieties: ["HA 89", "Helio"] },
+  ],
+  SA: [
+    { name: "Dates", icon: "🌴", varieties: ["Medjool", "Deglet Noor"] },
+    { name: "Alfalfa", icon: "🍀", varieties: ["Coastal", "Common"] },
+    { name: "Fodder Sorghum", icon: "🌾", varieties: ["Sorghum BMR"] },
+  ],
+  US: [
+    { name: "Corn", icon: "🌽" },
+    { name: "Soybean", icon: "🌱" },
+    { name: "Wheat", icon: "🌾" },
+  ],
+  ARB: [
+    { name: "Dates", icon: "🌴", varieties: ["Medjool", "Deglet Noor"] },
+  ],
+  DEFAULT: [
+    { name: "Mixed Grains", icon: "🌾" },
+    { name: "Legumes", icon: "🫘" },
+    { name: "Oilseeds", icon: "🌻" },
+  ],
+};
 
 const keyPriorities = [
   {
@@ -37,6 +62,11 @@ const keyPriorities = [
 ];
 
 const SummarySection = () => {
+  const { location } = useLocation();
+  const countryCode = (location.countryCode || "").toUpperCase();
+  const recommendedCrops =
+    countryCropMap[countryCode] || countryCropMap[location.country as string] || countryCropMap["DEFAULT"];
+
   return (
     <section className="section-padding bg-gradient-to-b from-background to-primary/5">
       <div className="container mx-auto">
@@ -82,20 +112,38 @@ const SummarySection = () => {
                 </h3>
               </div>
 
-              <div className="flex flex-wrap gap-3 mb-8">
-                {recommendedCrops.map((crop, index) => (
-                  <motion.div
-                    key={crop.name}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 * index }}
-                    className="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full"
-                  >
-                    <span className="text-xl">{crop.icon}</span>
-                    <span className="font-medium">{crop.name}</span>
-                  </motion.div>
-                ))}
+              <div className="flex flex-col gap-4 mb-6">
+                <div className="flex flex-wrap gap-3">
+                  {recommendedCrops.map((crop, index) => (
+                    <motion.div
+                      key={crop.name}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.08 * index }}
+                      className="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full"
+                    >
+                      <span className="text-xl">{crop.icon}</span>
+                      <span className="font-medium">{crop.name}</span>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {recommendedCrops.map((crop) => (
+                    <div key={crop.name} className="p-3 bg-white/10 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="font-medium">{crop.name}</div>
+                        <div className="text-sm text-muted-foreground">{crop.icon}</div>
+                      </div>
+                      {crop.varieties && (
+                        <div className="text-xs text-muted-foreground mt-2">
+                          Varieties: {crop.varieties.join(", ")}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="flex items-center gap-2 text-white/90">
