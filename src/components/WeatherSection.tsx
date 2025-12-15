@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Cloud, CloudRain, Thermometer, Wind, Droplets, Sun, AlertTriangle, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useLocation } from "@/contexts/LocationContext";
 
 interface WeatherData {
   temp: number;
@@ -16,30 +17,14 @@ interface WeatherData {
 const OPENWEATHER_API_KEY = "799e5b28e2ba918cc248829a2e6ddade";
 
 const WeatherSection = () => {
+  const { location } = useLocation();
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [location, setLocation] = useState({ lat: 34.0522, lon: -118.2437 }); // Default: Los Angeles
-
-  useEffect(() => {
-    // Try to get user's location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-          });
-        },
-        () => {
-          // Use default location if permission denied
-          console.log("Using default location");
-        }
-      );
-    }
-  }, []);
 
   useEffect(() => {
     const fetchWeather = async () => {
+      if (location.loading) return;
+      
       try {
         const response = await fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&appid=${OPENWEATHER_API_KEY}&units=metric`
@@ -50,11 +35,11 @@ const WeatherSection = () => {
           temp: Math.round(data.main.temp),
           feels_like: Math.round(data.main.feels_like),
           humidity: data.main.humidity,
-          wind_speed: Math.round(data.wind.speed * 3.6), // Convert to km/h
+          wind_speed: Math.round(data.wind.speed * 3.6),
           weather: data.weather[0].main,
           icon: data.weather[0].icon,
-          city: data.name,
-          country: data.sys.country,
+          city: data.name || location.city,
+          country: data.sys.country || location.countryCode,
         });
       } catch (error) {
         console.error("Error fetching weather:", error);
@@ -75,9 +60,46 @@ const WeatherSection = () => {
       Rain: <CloudRain className="w-16 h-16 text-water" />,
       Drizzle: <CloudRain className="w-16 h-16 text-water" />,
       Thunderstorm: <CloudRain className="w-16 h-16 text-destructive" />,
+      Mist: <Cloud className="w-16 h-16 text-sky" />,
+      Haze: <Cloud className="w-16 h-16 text-muted-foreground" />,
+      Fog: <Cloud className="w-16 h-16 text-muted-foreground" />,
     };
     
     return iconMap[weather.weather] || <Cloud className="w-16 h-16 text-sky" />;
+  };
+
+  // Calculate dynamic risk indicators based on weather
+  const getRiskIndicators = () => {
+    if (!weather) return [
+      { label: "Drought Risk", level: "Medium", percent: 45, color: "bg-risk-medium" },
+      { label: "Flood Risk", level: "Low", percent: 20, color: "bg-risk-low" },
+      { label: "Frost Risk", level: "Low", percent: 15, color: "bg-risk-low" },
+    ];
+
+    const droughtRisk = weather.humidity < 40 ? 75 : weather.humidity < 60 ? 45 : 20;
+    const floodRisk = weather.weather === "Rain" || weather.weather === "Thunderstorm" ? 65 : weather.humidity > 80 ? 40 : 15;
+    const frostRisk = weather.temp < 5 ? 80 : weather.temp < 10 ? 45 : 10;
+
+    return [
+      { 
+        label: "Drought Risk", 
+        level: droughtRisk > 60 ? "High" : droughtRisk > 35 ? "Medium" : "Low", 
+        percent: droughtRisk, 
+        color: droughtRisk > 60 ? "bg-risk-high" : droughtRisk > 35 ? "bg-risk-medium" : "bg-risk-low" 
+      },
+      { 
+        label: "Flood Risk", 
+        level: floodRisk > 60 ? "High" : floodRisk > 35 ? "Medium" : "Low", 
+        percent: floodRisk, 
+        color: floodRisk > 60 ? "bg-risk-high" : floodRisk > 35 ? "bg-risk-medium" : "bg-risk-low" 
+      },
+      { 
+        label: "Frost Risk", 
+        level: frostRisk > 60 ? "High" : frostRisk > 35 ? "Medium" : "Low", 
+        percent: frostRisk, 
+        color: frostRisk > 60 ? "bg-risk-high" : frostRisk > 35 ? "bg-risk-medium" : "bg-risk-low" 
+      },
+    ];
   };
 
   const weatherCards = [
@@ -104,11 +126,7 @@ const WeatherSection = () => {
     },
   ];
 
-  const riskIndicators = [
-    { label: "Drought Risk", level: "Medium", percent: 45, color: "bg-risk-medium" },
-    { label: "Flood Risk", level: "Low", percent: 20, color: "bg-risk-low" },
-    { label: "Frost Risk", level: "Low", percent: 15, color: "bg-risk-low" },
-  ];
+  const riskIndicators = getRiskIndicators();
 
   return (
     <section className="section-padding bg-gradient-to-b from-background to-muted/30">
@@ -143,7 +161,7 @@ const WeatherSection = () => {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full">
             <MapPin className="w-4 h-4" />
             <span className="font-medium">
-              {loading ? "Detecting location..." : `${weather?.city}, ${weather?.country}`}
+              {loading || location.loading ? "Detecting location..." : `${location.city}, ${location.state}, ${location.country}`}
             </span>
           </div>
         </motion.div>
@@ -179,7 +197,7 @@ const WeatherSection = () => {
                     {weather?.weather}
                   </div>
                   <div className="mt-4 px-4 py-2 bg-leaf/10 text-leaf rounded-full text-sm font-medium">
-                    Good for planting
+                    {weather?.temp && weather.temp > 10 && weather.temp < 35 ? "Good for planting" : "Check conditions"}
                   </div>
                 </>
               )}
